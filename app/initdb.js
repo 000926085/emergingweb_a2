@@ -1,8 +1,22 @@
+require('dotenv').config({ path: '../.env' });
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require('bcrypt');
+
+const { COORDINATOR_USER, COORDINATOR_PASS,
+        DEPOT_STAFF_USER, DEPOT_STAFF_PASS
+} = process.env;
+
+if (!COORDINATOR_PASS || !DEPOT_STAFF_PASS) {
+    console.error("COORDINATOR_PASS and DEPOT_STAFF_PASS must be set in your .env file.");
+    process.exit(1);
+}
+
 var db = new sqlite3.Database("database.db");
 
 async function setupDatabase() {
+const coordinatorPassword = await bcrypt.hash(COORDINATOR_PASS, 10);
+const depotStaffPassword = await bcrypt.hash(DEPOT_STAFF_PASS, 10);
+
     db.serialize(() => {
         db.run('PRAGMA foreign_keys = ON');
 
@@ -58,6 +72,11 @@ async function setupDatabase() {
         insertRole.run(1, "Coordinator")
         insertRole.run(2, "Depot Staff")
         insertRole.finalize();
+
+        const insertAccount = db.prepare('INSERT INTO accounts (role_id, username, password) VALUES (?, ?, ?)');
+        insertAccount.run(1, COORDINATOR_USER, coordinatorPassword);
+        insertAccount.run(2, DEPOT_STAFF_USER, depotStaffPassword);
+        insertAccount.finalize();
 
         const insertDepartment = db.prepare('INSERT INTO departments (department_id, name) VALUES (?, ?)');
         insertDepartment.run(1, "Business")
