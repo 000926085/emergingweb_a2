@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require('bcrypt');
 
@@ -94,11 +94,12 @@ const depotStaffPassword = await bcrypt.hash(DEPOT_STAFF_PASS, 10);
         insertItem.run("Laptop Cart", "Utility", "36");
         insertItem.run("Whiteboard on Wheels", "Utility", "12");
         insertItem.finalize();
+
+        db.run("SELECT 1", () => {
+            db.close();
+            console.log("Database created successfully.");
+        });
     });
-
-    db.close();
-
-    console.log("Database created successfully.");
 }
 
 setupDatabase();
