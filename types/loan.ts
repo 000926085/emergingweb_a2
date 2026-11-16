@@ -1,13 +1,3 @@
-export interface Item {
-  item_id: number;
-  name: string;
-}
-
-export interface Department {
-  department_id: number;
-  name: string;
-}
-
 export interface LoanRequest {
   date: Date,
   requestedBy: string,
