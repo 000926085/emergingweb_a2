@@ -9,15 +9,27 @@ export default async function Equipment() {
     );
 
     return (
-        <div>
-            <h1>Equipment Page!</h1>
-            <ul>
-                {items.map((item) => (
-                    <li key={item.item_id}>
-                        {item.name} - {item.category} (Stock: {item.stock})
-                    </li>
-                ))}
-            </ul>
+        <div className='mx-3'>
+            <h1>Available Equipment</h1>
+
+            <table className="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {items.map((item) => (
+                        <tr key={item.item_id}>
+                            <td scope="row">{item.name}</td>
+                            <td>{item.category}</td>
+                            <td>{item.stock}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
