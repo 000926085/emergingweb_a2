@@ -14,22 +14,29 @@ export default function NavLinks() {
             <Link
                 className={`nav-link ${pathname === '/' ? 'active text-primary fw-semibold' : ''}`}
                 href="/">
-              Home
-          </Link>
+                Home
+            </Link>
           </li>
           <li className="nav-item">
             <Link 
                 className={`nav-link ${pathname === '/equipment' ? 'active text-primary fw-semibold' : ''}`}
                 href="/equipment">
-              Equipment
-          </Link>
+                Equipment
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
+                className={`nav-link ${pathname === '/statuses' ? 'active text-primary fw-semibold' : ''}`}
+                href="/statuses">
+                Statuses
+            </Link>
           </li>
           <li className="nav-item">
             <Link 
                 className={`nav-link ${pathname === '/login' ? 'active text-primary fw-semibold' : ''}`}
                 href="/login">
-              Login
-          </Link>
+                Login
+            </Link>
           </li>
         </ul>
       </div>

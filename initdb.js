@@ -53,13 +53,14 @@ const depotStaffPassword = await bcrypt.hash(DEPOT_STAFF_PASS, 10);
 
         db.run(`CREATE TABLE loan_requests (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tracking_code TEXT NOT NULL,
             date DATETIME DEFAULT CURRENT_TIMESTAMP,
             requestedBy TEXT NOT NULL,
             department INTEGER NOT NULL,
             itemRequested INTEGER NOT NULL,
             reason TEXT NOT NULL,
-            needed_from TEXT NOT NULL,
-            needed_until TEXT NOT NULL,
+            needed_from DATETIME NOT NULL,
+            needed_until DATETIME NOT NULL,
             status TEXT NOT NULL,
             picked TEXT,
             returned TEXT,
@@ -94,6 +95,22 @@ const depotStaffPassword = await bcrypt.hash(DEPOT_STAFF_PASS, 10);
         insertItem.run("Laptop Cart", "Utility", "36");
         insertItem.run("Whiteboard on Wheels", "Utility", "12");
         insertItem.finalize();
+
+        const insertRequest = db.prepare(`INSERT INTO loan_requests 
+            (tracking_code, requestedBy, department, 
+            itemRequested, reason, needed_from, needed_until,
+            status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
+        insertRequest.run(
+            "A001", 
+            "Yesod", 
+            4, 
+            1, 
+            "Movie night.", 
+            "2026-11-20 18:00:00", 
+            "2026-11-21 10:00:00", 
+            "Pending"              
+        );
+        insertRequest.finalize();
 
         db.run("SELECT 1", () => {
             db.close();
