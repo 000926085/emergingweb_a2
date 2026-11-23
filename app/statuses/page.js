@@ -1,46 +1,50 @@
-import { redirect } from 'next/navigation';
-import { getDb } from '@/lib/db';
+'use client'
 
-export default async function StatusRequests() {
-    async function lookupStatus(formData) {
-        'use server';
+import { useState } from "react";
+import { lookupStatus } from "../actions";
 
-        const rawCode = formData.get('inputTracking');
-        if (typeof rawCode !== 'string' || !rawCode.trim()) {
-            return;
+export default function StatusRequests() {
+    const [trackingCode, setTrackingCode] = useState('');
+    const [error, setError] = useState('');
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setError('');
+        setTrackingCode('');
+
+        const result = await lookupStatus(trackingCode);
+
+        if (result?.error) {
+            setError(result.error);
         }
-
-        const code = rawCode.trim();
-        const db = await getDb();
-        const request = await db.get(
-            'SELECT tracking_code FROM loan_requests WHERE tracking_code = ?',
-            [code]
-        );
-
-        if (!request) { return; }
-
-        redirect(`/statuses/${encodeURIComponent(code)}`);
     }
 
     return (
         <div className='mx-3'>
             <h1>Request Status Lookup</h1>
 
-            <form className="row g-3 align-items-center" action={lookupStatus}>
+            <form className="row g-3 align-items-center" onSubmit={handleSubmit}>
                 <div className="col-auto">
                     <input 
-                    type="text" 
-                    className="form-control" 
-                    name="inputTracking"
-                    id="inputTracking" 
-                    placeholder="Enter tracking code" 
-                    required
+                        type="text" 
+                        className="form-control" 
+                        name="inputTracking"
+                        id="inputTracking" 
+                        value={trackingCode}
+                        onChange={(e) => setTrackingCode(e.target.value)}
+                        placeholder="Enter tracking code" 
+                        required
                     />
                 </div>
                 <div className="col-auto">
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </div>
             </form>
+            {error && (
+                <div className="text-danger mt-2" role="alert">
+                    {error}
+                </div>
+            )}
         </div>
     );
 }

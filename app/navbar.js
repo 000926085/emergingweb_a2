@@ -7,7 +7,7 @@ export default function NavLinks() {
   const pathname = usePathname();
  
   return (
-    <nav className="navbar navbar-expand-lg">
+    <nav className="navbar navbar-expand-sm">
       <div className="container-fluid justify-content-center">
         <ul className="navbar-nav gap-3">
           <li className="nav-item">
