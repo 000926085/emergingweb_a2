@@ -26,6 +26,13 @@ export default function NavLinks() {
           </li>
           <li className="nav-item">
             <Link 
+                className={`nav-link ${pathname === '/requests' ? 'active text-primary fw-semibold' : ''}`}
+                href="/requests">
+                Submit Request
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
                 className={`nav-link ${pathname === '/statuses' ? 'active text-primary fw-semibold' : ''}`}
                 href="/statuses">
                 Statuses

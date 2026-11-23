@@ -1,6 +1,6 @@
 'use server'
 
-import { getDb } from '@/lib/db';
+import { getDb } from '../lib/db';
 import { redirect } from 'next/navigation';
 
 export async function lookupStatus(rawCode) {
